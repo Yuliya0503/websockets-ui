@@ -3,10 +3,12 @@ import { WebSocket } from 'ws';
 import { parseRawIncommingMessage } from '../helpers/parseRawIncMess';
 import { EInCommands, EOutCommands } from '../models/commands';
 import { buildOutMessage } from '../helpers/buildOutMess';
+import RoomService from '../room/roomSrvice';
 
 export default class GameController {
   private userServises = new UserServices();
   private translate: (mess: string) => void;
+  private roomService = new RoomService();
 
   constructor(translate: (mess: string) => void) {
     this.translate = translate;
@@ -32,6 +34,11 @@ export default class GameController {
       const winnersResponse = JSON.stringify(buildOutMessage(EOutCommands.UPDATE_WINNERS, winners));
       console.log(`Responsed winners: ${winnersResponse}`);
       this.translate(winnersResponse);
+
+      const rooms = this.roomService.getRooms();
+      const roomResponse = JSON.stringify(buildOutMessage(EOutCommands.UPDATE_ROOM, rooms));
+      console.log(`Responsed personal: ${roomResponse}`);
+      ws.send(roomResponse);
     }
   }
 }
