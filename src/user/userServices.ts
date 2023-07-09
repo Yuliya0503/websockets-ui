@@ -1,7 +1,7 @@
 import { WebSocket } from "ws";
 import User from "./user";
 import { IAuthenticatedWS } from "../models/iuser";
-import { IReg } from "../models/ireg";
+import { IReg } from "../models/out";
 
 export default class UserServices {
   private users: User[] = [];
