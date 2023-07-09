@@ -1,4 +1,4 @@
-import { IRoom, IUser, IAuthenticatedWS } from "../models/iuser";
+import { IRoom, IUser, IAuthenticatedWS } from '../models/iuser';
 
 export default class Room implements IRoom {
   private static index = 0;
