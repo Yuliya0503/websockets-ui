@@ -1,4 +1,4 @@
-import { IShip } from "./common";
+import { IShip } from './common';
 
 export interface IRegData {
   name: string;

@@ -1,27 +1,29 @@
-import { IUser,  IRoom } from "./iuser";
-import { IPosition, IShip, AttackStatus } from "./common";
+import { IUser, IRoom, IWunner } from './iuser';
+import { IPosition, IShip, AttackStatus } from './common';
 
 export interface IReg extends IUser {
   error: boolean;
   errorText: string;
-};
-
-export interface ICreateGameData {
-  idGame: number,
-  idPalayer: number,
 }
 
-export type IUpdateRoomData = IRoom[];
+export type UpdateWinnersData = IWunner[];
+
+export interface ICreateGameData {
+  idGame: number;
+  idPalayer: number;
+}
+
+export type UpdateRoomData = IRoom[];
 
 export interface IStartGameData {
-  ships: IShip[],
-  currentPlayerIndex: number
+  ships: IShip[];
+  currentPlayerIndex: number;
 }
 
 export interface IAttackData {
   position: IPosition;
   currentPlayer: ICurrPlayerData;
-  status: AttackStatus
+  status: AttackStatus;
 }
 
 export interface ICurrPlayerData {
@@ -31,4 +33,3 @@ export interface ICurrPlayerData {
 export interface IFinishData {
   winPlayer: number;
 }
-

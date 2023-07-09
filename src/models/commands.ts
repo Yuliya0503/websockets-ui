@@ -15,5 +15,5 @@ export enum EInCommands {
   ADD_PLAYER_TO_ROOM = 'add_player_to_room',
   ADD_SHIPS = 'add_ships',
   ATTACK = 'attack',
-  RANDOM_ATTACK = 'randomAttack'
+  RANDOM_ATTACK = 'randomAttack',
 }

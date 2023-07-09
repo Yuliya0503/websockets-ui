@@ -1,10 +1,10 @@
-import { WebSocketServer, Server } from "ws";
+import { WebSocketServer, Server } from 'ws';
 
 export default class WSServer {
   private port: number;
   private server: Server;
 
-  constructor(port:number) {
+  constructor(port: number) {
     this.port = port;
     this.server = new WebSocketServer({ port });
   }
