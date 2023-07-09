@@ -5,3 +5,13 @@ export interface IUser {
 }
 
 export interface IAuthenticatedWS extends IUser, WebSocket {};
+
+export interface IWunner {
+  name: string,
+  wins: number,
+};
+
+export interface IRoom {
+  roomId: number,
+  roomUsers: IUser[],
+};
