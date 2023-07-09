@@ -34,4 +34,12 @@ export interface IFinishData {
   winPlayer: number;
 }
 
-export type OutData = IReg | UpdateWinnersData | ICreateGameData | UpdateRoomData | IStartGameData | IAttackData | ICurrPlayerData |IFinishData
+export type OutData =
+  | IReg
+  | UpdateWinnersData
+  | ICreateGameData
+  | UpdateRoomData
+  | IStartGameData
+  | IAttackData
+  | ICurrPlayerData
+  | IFinishData;

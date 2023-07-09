@@ -21,7 +21,7 @@ export default class WSServer {
       ws.on('message', (data) => {
         try {
           this.gameController.incommMess(ws, data.toString());
-        } catch(error) {
+        } catch (error) {
           console.error(error);
         }
       });
@@ -30,8 +30,8 @@ export default class WSServer {
   }
 
   public translate(mess: string) {
-    this.server.clients.forEach(client => {
+    this.server.clients.forEach((client) => {
       client.send(mess);
-    })
+    });
   }
 }

@@ -3,7 +3,6 @@ import User from './user';
 import { IAuthenticatedWS, IWunner } from '../models/iuser';
 import { IReg } from '../models/out';
 
-
 export default class UserServices {
   private users: User[] = [];
   private winners: IWunner[] = [];
@@ -51,14 +50,16 @@ export default class UserServices {
   }
 
   public winnerProc(playerId: number): void {
-    const user = this.users.find(({index}) => {
-      return (index === playerId)
+    const user = this.users.find(({ index }) => {
+      return index === playerId;
     }) as User;
-    
-    this.winners = this.winners.map(({ name, wins}) => {
-      return ((name === user.name) ? {name, wins: wins +1} : {name, wins})
-    }).sort((winI, winJ) => {
-      return (winJ.wins - winI.wins)
-    });
+
+    this.winners = this.winners
+      .map(({ name, wins }) => {
+        return name === user.name ? { name, wins: wins + 1 } : { name, wins };
+      })
+      .sort((winI, winJ) => {
+        return winJ.wins - winI.wins;
+      });
   }
 }

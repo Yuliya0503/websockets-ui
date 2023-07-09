@@ -1,4 +1,4 @@
-import { IIncomingMessage } from "src/models/inCommands";
+import { IIncomingMessage } from 'src/models/inCommands';
 
 export const parseRawIncommingMessage = (message: string) => {
   try {

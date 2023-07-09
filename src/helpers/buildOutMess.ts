@@ -1,10 +1,10 @@
 import { EOutCommands } from '../models/commands';
-import { OutData } from '../models/out'
+import { OutData } from '../models/out';
 
 export const buildOutMessage = (type: EOutCommands, data: OutData) => {
-  return ({
+  return {
     type,
-    data: (JSON.stringify(data)),
+    data: JSON.stringify(data),
     id: 0,
-  })
-}
+  };
+};
