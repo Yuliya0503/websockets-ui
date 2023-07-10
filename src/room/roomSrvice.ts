@@ -22,6 +22,13 @@ export default class RoomService {
     return room || null;
   }
 
+  getRoomByRoomId(id: number): Room | null {
+    const room = this.rooms.find(({ roomId }) => {
+      return roomId === id;
+    });
+    return room || null;
+  }
+
   createRoom(ws: IAuthenticatedWS): Room | null {
     const roomExist = this.getRoomByUserId(ws.index);
     if (roomExist) {
@@ -31,6 +38,20 @@ export default class RoomService {
       const room = new Room(ws);
       this.rooms.push(room);
       return room;
+    }
+  }
+
+  addPlayerToRoom(ws: IAuthenticatedWS, indexRoom: number) {
+    const room = this.getRoomByRoomId(indexRoom);
+    if(this.getRoomByUserId(ws.index)) {
+      console.error('Error: player cannot enter his own room');
+      return;
+    } else if(!room) {
+      console.error('Error: room not found');
+      return;
+    } else {
+      room.sockets.push(ws);
+      room.roomUsers.push({ name: ws.name, index: ws.index });
     }
   }
 }

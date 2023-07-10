@@ -4,6 +4,7 @@ import { parseRawIncommingMessage } from '../helpers/parseRawIncMess';
 import { EInCommands, EOutCommands } from '../models/commands';
 import { buildOutMessage } from '../helpers/buildOutMess';
 import RoomService from '../room/roomSrvice';
+import { IAuthenticatedWS } from 'src/models/iuser';
 
 export default class GameController {
   private userServises = new UserServices();
@@ -39,6 +40,13 @@ export default class GameController {
       const roomResponse = JSON.stringify(buildOutMessage(EOutCommands.UPDATE_ROOM, rooms));
       console.log(`Responsed personal: ${roomResponse}`);
       ws.send(roomResponse);
-    }
+    } else if (message.type === EInCommands.CREATE_ROOM) {
+      const room = this.roomService.createRoom(ws as IAuthenticatedWS);
+      if (room) {
+        const rooms = this.roomService.getRooms();
+        const roomResponse = JSON.stringify(buildOutMessage(EOutCommands.UPDATE_ROOM, rooms));
+        console.log(`Translate: ${roomResponse}`);
+      }
+    } 
   }
 }
