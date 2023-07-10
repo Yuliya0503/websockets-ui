@@ -46,7 +46,16 @@ export default class GameController {
         const rooms = this.roomService.getRooms();
         const roomResponse = JSON.stringify(buildOutMessage(EOutCommands.UPDATE_ROOM, rooms));
         console.log(`Translate: ${roomResponse}`);
+        this.translate(roomResponse);
       }
-    } 
+      
+    } else if(message.type === EInCommands.ADD_PLAYER_TO_ROOM) {
+      const { data: { indexRoom } } = message;
+      this.roomService.addPlayerToRoom(ws as IAuthenticatedWS, indexRoom);
+      const rooms = this.roomService.getRooms();
+      const roomResponse = JSON.stringify(buildOutMessage(EOutCommands.UPDATE_ROOM, rooms));
+      console.log(`Translate: ${roomResponse}`);
+      this.translate(roomResponse);
+    }
   }
 }
