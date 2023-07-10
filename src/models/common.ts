@@ -17,6 +17,26 @@ export enum ShipType {
   Huge = 'huge',
 }
 
+export enum ShipState {
+  Healthy = 'healthy',
+  Damaged = 'damaged',
+  Sunk = 'sunk',
+}
+
+export enum PartState {
+  Healthy = 'healthy',
+  Damaged = 'damaged',
+}
+
+export interface IPart extends IPosition {
+  partState: PartState;
+}
+
+export interface IShipData {
+  state: ShipState;
+  parts: IPart[]
+}
+
 export enum AttackStatus {
   Miss = 'miss',
   Killed = 'killed',
