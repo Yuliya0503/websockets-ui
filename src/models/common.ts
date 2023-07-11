@@ -34,7 +34,7 @@ export interface IPart extends IPosition {
 
 export interface IShipData {
   state: ShipState;
-  parts: IPart[]
+  parts: IPart[];
 }
 
 export enum AttackStatus {
