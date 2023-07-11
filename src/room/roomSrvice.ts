@@ -1,5 +1,6 @@
 import Room from './room';
 import { IAuthenticatedWS } from '../models/iuser';
+import { IShip } from 'src/models/common';
 
 export default class RoomService {
   private rooms: Room[] = [];
@@ -15,6 +16,10 @@ export default class RoomService {
     return resultRooms;
   }
 
+  closeRoom(id: number): void {
+    this.rooms = this.rooms.filter(({ roomId }) => roomId !== id);
+  }
+
   getRoomByUserId(id: number): Room | null {
     const room = this.rooms.find(({ roomUsers }) => {
       return roomUsers.find((rUser) => rUser.index === id);
@@ -25,6 +30,13 @@ export default class RoomService {
   getRoomByRoomId(id: number): Room | null {
     const room = this.rooms.find(({ roomId }) => {
       return roomId === id;
+    });
+    return room || null;
+  }
+
+  getRoomByGameId(id: number): Room | null {
+    const room = this.rooms.find(({ game }) => {
+      game.idGame === id;
     });
     return room || null;
   }
@@ -43,15 +55,24 @@ export default class RoomService {
 
   addPlayerToRoom(ws: IAuthenticatedWS, indexRoom: number) {
     const room = this.getRoomByRoomId(indexRoom);
-    if(this.getRoomByUserId(ws.index)) {
+    if (this.getRoomByUserId(ws.index)) {
       console.error('Error: player cannot enter his own room');
       return;
-    } else if(!room) {
+    } else if (!room) {
       console.error('Error: room not found');
       return;
-    } else {
-      room.sockets.push(ws);
-      room.roomUsers.push({ name: ws.name, index: ws.index });
     }
+    room.sockets.push(ws);
+    room.roomUsers.push({ name: ws.name, index: ws.index });
+    room.gameCreate();
+  }
+
+  addShips(gameId: number, playerId: number, ships: IShip[]) {
+    const room = this.getRoomByGameId(gameId);
+    if (!room) {
+      console.error('Error:no room found');
+      return;
+    }
+    room.setPlayerShips(playerId, ships);
   }
 }

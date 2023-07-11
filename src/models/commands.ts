@@ -12,7 +12,7 @@ export enum EOutCommands {
 export enum EInCommands {
   REGISTER = 'reg',
   CREATE_ROOM = 'create_room',
-  ADD_PLAYER_TO_ROOM = 'add_player_to_room',
+  ADD_PLAYER_TO_ROOM = 'add_user_to_room',
   ADD_SHIPS = 'add_ships',
   ATTACK = 'attack',
   RANDOM_ATTACK = 'randomAttack',
