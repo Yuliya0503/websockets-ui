@@ -23,7 +23,10 @@ export default class Room implements IRoom {
   gameCreate(): void {
     this.game = new Game();
     this.sockets.forEach((ws) => {
-      const details: ICreateGameData = { idGame: this.game.idGame, idPalayer: ws.index };
+      const details: ICreateGameData = {
+        idGame: this.game.idGame,
+        idPalayer: ws.index,
+      };
       const gameCreateResponse = JSON.stringify(buildOutMessage(EOutCommands.CREATE_GAME, details));
       console.log(`Responsed: ${gameCreateResponse}`);
       ws.send(gameCreateResponse);
@@ -48,5 +51,12 @@ export default class Room implements IRoom {
         ws.send(startGameResp);
       });
     }
+  }
+
+  getOppositePlayer(playerId: number): number {
+    const oppositePlayer = this.roomUsers.find(({ index }) => {
+      return index !== playerId;
+    });
+    return oppositePlayer?.index as number;
   }
 }
