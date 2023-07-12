@@ -1,10 +1,10 @@
-import { IShip, IShipData, PartState, ShipState } from '../models/common';
-
+import { AttackStatus, IPosition, IShip, IShipData, PartState, ShipState } from '../models/common';
+import { randomIntRange } from '../helpers/getRandom';
 export default class Game {
   private static index = 0;
-  idGame: number;
-  isStarted = false;
-  ships = new Map<number, IShip[]>();
+  public idGame: number;
+  public isStarted = false;
+  public ships = new Map<number, IShip[]>();
   private dataShips = new Map<number, IShipData[]>();
   private currPlayer: number;
 
@@ -39,5 +39,50 @@ export default class Game {
 
   public getCurrPlayer(): number {
     return this.currPlayer;
+  }
+
+  attack(opponentId: number, position: IPosition): AttackStatus {
+    const opponentShipData = this.dataShips.get(opponentId) as IShipData[];
+    let status = AttackStatus.Miss;
+    const updateOpponentShipData = opponentShipData.map(({ state, parts }) => {
+      let updateData = state;
+      let updatePart = parts.map(({ partState, x, y }) => {
+        let updateState = partState;
+        if (position.x === x && position.y === y) {
+          status = AttackStatus.Shot;
+          updateState = PartState.Damaged;
+          updateData = ShipState.Damaged;
+        }
+        return { partState: updateState, x, y };
+      });
+      const resPatrState = updatePart.every(({ partState }) => {
+        return partState === PartState.Damaged;
+      });
+      if (updatePart.length > 0 && resPatrState) {
+        updatePart = [];
+        updateData = ShipState.Sunk;
+        status = AttackStatus.Killed;
+      }
+      return {
+        state: updateData,
+        parts: updatePart,
+      };
+    });
+    this.dataShips.set(opponentId, updateOpponentShipData);
+    return status;
+  }
+
+  attackHandle(curPlayer: number, opponentId: number, possPosition: IPosition | null) {
+    const position: IPosition = possPosition || this.getRandom();
+    const status: AttackStatus = this.attack(opponentId, position);
+    return { curPlayer, status, position };
+  }
+
+  getRandom(): IPosition {
+    const randomeNumber: () => number = randomIntRange.bind(null, 0, 9);
+    return {
+      x: randomeNumber(),
+      y: randomeNumber(),
+    };
   }
 }
