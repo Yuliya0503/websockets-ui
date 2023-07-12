@@ -72,10 +72,10 @@ export default class Game {
     return status;
   }
 
-  attackHandle(curPlayer: number, opponentId: number, possPosition: IPosition | null) {
+  attackHandle(currentPlayer: number, opponentId: number, possPosition: IPosition | null) {
     const position: IPosition = possPosition || this.getRandom();
     const status: AttackStatus = this.attack(opponentId, position);
-    return { curPlayer, status, position };
+    return { currentPlayer, status, position };
   }
 
   getRandom(): IPosition {
@@ -84,5 +84,13 @@ export default class Game {
       x: randomeNumber(),
       y: randomeNumber(),
     };
+  }
+
+  endOfGameCheck(oppositId: number): boolean {
+    const oppositDataShip = this.dataShips.get(oppositId) as IShipData[];
+    const endOfCheck = oppositDataShip.every(({ state }) => {
+      return state === ShipState.Sunk;
+    });
+    return endOfCheck;
   }
 }
