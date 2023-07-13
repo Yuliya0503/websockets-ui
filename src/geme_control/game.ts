@@ -45,26 +45,26 @@ export default class Game {
     const opponentShipData = this.dataShips.get(opponentId) as IShipData[];
     let status = AttackStatus.Miss;
     const updateOpponentShipData = opponentShipData.map(({ state, parts }) => {
-      let updateData = state;
+      let updateShipState = state;
       let updatePart = parts.map(({ partState, x, y }) => {
-        let updateState = partState;
+        let updatePartState = partState;
         if (position.x === x && position.y === y) {
           status = AttackStatus.Shot;
-          updateState = PartState.Damaged;
-          updateData = ShipState.Damaged;
+          updatePartState = PartState.Damaged;
+          updateShipState = ShipState.Damaged;
         }
-        return { partState: updateState, x, y };
+        return { partState: updatePartState, x, y };
       });
       const resPatrState = updatePart.every(({ partState }) => {
         return partState === PartState.Damaged;
       });
       if (updatePart.length > 0 && resPatrState) {
         updatePart = [];
-        updateData = ShipState.Sunk;
+        updateShipState = ShipState.Sunk;
         status = AttackStatus.Killed;
       }
       return {
-        state: updateData,
+        state: updateShipState,
         parts: updatePart,
       };
     });
