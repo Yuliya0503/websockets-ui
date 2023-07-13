@@ -1,4 +1,4 @@
-import { IUser } from 'src/models/iuser';
+import { IUser } from '../models/iuser';
 
 export default class User implements IUser {
   private static ind = 0;

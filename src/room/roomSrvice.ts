@@ -1,6 +1,6 @@
 import Room from './room';
 import { IAuthenticatedWS } from '../models/iuser';
-import { IShip } from 'src/models/common';
+import { IPosition, IShip } from '../models/common';
 
 export default class RoomService {
   private rooms: Room[] = [];
@@ -70,9 +70,22 @@ export default class RoomService {
   addShips(gameId: number, playerId: number, ships: IShip[]) {
     const room = this.getRoomByGameId(gameId);
     if (!room) {
-      console.error('Error:no room found');
+      console.error('Error: room not found');
       return;
     }
     room.setPlayerShips(playerId, ships);
+  }
+
+  attackHandler(gameId: number, playerId: number, position: IPosition | null) {
+    const room = this.getRoomByGameId(gameId);
+    if (room === null) {
+      console.log('No room');
+      return;
+    }
+    const isEndGame = room.attackHandler(playerId, position);
+    if (isEndGame) {
+      this.closeRoom(room.roomId);
+    }
+    return isEndGame;
   }
 }
