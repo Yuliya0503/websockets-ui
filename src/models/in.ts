@@ -16,13 +16,13 @@ export interface IAddShipsData {
 }
 
 export interface IAttackData {
-  gameID: number;
+  gameId: number;
   x: number;
   y: number;
   indexPlayer: number;
 }
 
 export interface IRundomAttackData {
-  gameID: number;
+  gameId: number;
   indexPlayer: number;
 }
