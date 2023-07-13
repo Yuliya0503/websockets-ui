@@ -3,7 +3,7 @@ import { ICreateGameData, IStartGameData } from '../models/out';
 import Game from '../geme_control/game';
 import { buildOutMessage } from '../helpers/buildOutMess';
 import { EOutCommands } from '../models/commands';
-import { AttackStatus, IPosition, IShip } from 'src/models/common';
+import { AttackStatus, IPosition, IShip } from '../models/common';
 
 export default class Room implements IRoom {
   private static index = 0;
@@ -63,11 +63,19 @@ export default class Room implements IRoom {
   }
 
   attackHandler(playerId: number, position: IPosition | null) {
+    if (this.endOfGame || this.attackProcess) {
+      console.log('End of game or other attack in process');
+      return false;
+    }
     const oppositePlayerId = this.game.getCurrPlayer();
+    if (oppositePlayerId !== playerId) {
+      console.log('Not players turn');
+      return false;
+    }
     const oppositId = this.getOppositePlayer(playerId);
     const attack = this.game.attackHandle(playerId, oppositId, position);
     this.attackProcess = true;
-    this.endOfGame = this.game.endOfGameCheck(oppositePlayerId);
+    this.endOfGame = this.game.endOfGameCheck(oppositId);
     this.sockets.forEach((ws: IAuthenticatedWS): void => {
       const attackResponse = JSON.stringify(buildOutMessage(EOutCommands.ATTACK, attack));
       console.log(`Response: ${attackResponse}`);
@@ -88,14 +96,6 @@ export default class Room implements IRoom {
         ws.send(turnResponse);
       }
     });
-    if (this.endOfGame || this.attackProcess) {
-      console.log('End of game or other attack in process');
-      return false;
-    }
-    if (oppositePlayerId !== playerId) {
-      console.log('Not players turn');
-      return false;
-    }
     this.attackProcess = false;
     return this.endOfGame;
   }
