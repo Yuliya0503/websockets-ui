@@ -3,7 +3,7 @@ import { ICreateGameData, IStartGameData } from '../models/out';
 import Game from '../geme_control/game';
 import { buildOutMessage } from '../helpers/buildOutMess';
 import { EOutCommands } from '../models/commands';
-import { IShip } from 'src/models/common';
+import { AttackStatus, IPosition, IShip } from 'src/models/common';
 
 export default class Room implements IRoom {
   private static index = 0;
@@ -11,6 +11,8 @@ export default class Room implements IRoom {
   public roomUsers: IUser[] = [];
   public sockets: IAuthenticatedWS[] = [];
   public game: Game;
+  public attackProcess = false;
+  public endOfGame = false;
 
   constructor(ws: IAuthenticatedWS) {
     this.roomId = Room.index;
@@ -58,5 +60,43 @@ export default class Room implements IRoom {
       return index !== playerId;
     });
     return oppositePlayer?.index as number;
+  }
+
+  attackHandler(playerId: number, position: IPosition | null) {
+    const oppositePlayerId = this.game.getCurrPlayer();
+    const oppositId = this.getOppositePlayer(playerId);
+    const attack = this.game.attackHandle(playerId, oppositId, position);
+    this.attackProcess = true;
+    this.endOfGame = this.game.endOfGameCheck(oppositePlayerId);
+    this.sockets.forEach((ws: IAuthenticatedWS): void => {
+      const attackResponse = JSON.stringify(buildOutMessage(EOutCommands.ATTACK, attack));
+      console.log(`Response: ${attackResponse}`);
+      ws.send(attackResponse);
+      if (this.endOfGame) {
+        const endOfGameResponse = JSON.stringify(
+          buildOutMessage(EOutCommands.FINISH, { winPlayer: playerId }),
+        );
+        console.log(`Response: ${endOfGameResponse}`);
+        ws.send(endOfGameResponse);
+      }
+      if (attack.status === AttackStatus.Miss) {
+        this.game.setCurrPlayer(oppositId);
+        const turnResponse = JSON.stringify(
+          buildOutMessage(EOutCommands.TURN, { currentPlayer: oppositId }),
+        );
+        console.log(`Response: ${turnResponse}`);
+        ws.send(turnResponse);
+      }
+    });
+    if (this.endOfGame || this.attackProcess) {
+      console.log('End of game or other attack in process');
+      return false;
+    }
+    if (oppositePlayerId !== playerId) {
+      console.log('Not players turn');
+      return false;
+    }
+    this.attackProcess = false;
+    return this.endOfGame;
   }
 }
