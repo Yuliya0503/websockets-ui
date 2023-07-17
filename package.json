@@ -8,7 +8,6 @@
     "scripts": {
         "start": "node -r ts-node/register ./index.ts",
         "start:dev": "nodemon --exec ts-node-dev ./index.ts",
-        "test": "echo \"Error: no test specified\" && exit 1",
         "lint": "eslint \"./**/*.ts\" --fix",
         "format": "prettier --write \"./**/*.ts\""
     },
