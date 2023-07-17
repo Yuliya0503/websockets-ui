@@ -1,11 +1,11 @@
 import { WebSocket } from 'ws';
 import User from './user';
-import { IAuthenticatedWS, IWunner } from '../models/iuser';
+import { IAuthenticatedWS, IWinner } from '../models/iuser';
 import { IReg } from '../models/out';
 
 export default class UserServices {
   private users: User[] = [];
-  private winners: IWunner[] = [];
+  private winners: IWinner[] = [];
 
   public register(name: string, pass: string, ws: WebSocket): IReg {
     const isUserExist = this.users.find(({ name: isNameExist }) => {
@@ -45,7 +45,7 @@ export default class UserServices {
     }
   }
 
-  public getWinners(): IWunner[] {
+  public getWinners(): IWinner[] {
     return this.winners;
   }
 

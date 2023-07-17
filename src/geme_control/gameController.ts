@@ -4,7 +4,7 @@ import { parseRawIncommingMessage } from '../helpers/parseRawIncMess';
 import { EInCommands, EOutCommands } from '../models/commands';
 import { buildOutMessage } from '../helpers/buildOutMess';
 import RoomService from '../room/roomSrvice';
-import { IAuthenticatedWS } from 'src/models/iuser';
+import { IAuthenticatedWS } from '../models/iuser';
 
 export default class GameController {
   private userServises = new UserServices();

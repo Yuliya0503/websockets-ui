@@ -1,4 +1,4 @@
-import { IUser, IRoom, IWunner } from './iuser';
+import { IUser, IRoom, IWinner } from './iuser';
 import { IPosition, IShip, AttackStatus } from './common';
 
 export interface IReg extends IUser {
@@ -6,11 +6,11 @@ export interface IReg extends IUser {
   errorText: string;
 }
 
-export type UpdateWinnersData = IWunner[];
+export type UpdateWinnersData = IWinner[];
 
 export interface ICreateGameData {
   idGame: number;
-  idPalayer: number;
+  idPlayer: number;
 }
 
 export type UpdateRoomData = IRoom[];

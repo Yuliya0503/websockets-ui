@@ -6,7 +6,7 @@ export interface IUser {
 
 export interface IAuthenticatedWS extends IUser, WebSocket {}
 
-export interface IWunner {
+export interface IWinner {
   name: string;
   wins: number;
 }

@@ -27,7 +27,7 @@ export default class Room implements IRoom {
     this.sockets.forEach((ws) => {
       const details: ICreateGameData = {
         idGame: this.game.idGame,
-        idPalayer: ws.index,
+        idPlayer: ws.index,
       };
       const gameCreateResponse = JSON.stringify(buildOutMessage(EOutCommands.CREATE_GAME, details));
       console.log(`Responsed: ${gameCreateResponse}`);
