@@ -5,9 +5,10 @@ import { EInCommands, EOutCommands } from '../models/commands';
 import { buildOutMessage } from '../helpers/buildOutMess';
 import RoomService from '../room/roomSrvice';
 import { IAuthenticatedWS } from '../models/iuser';
+import { IPosition } from 'src/models/common';
 
 export default class GameController {
-  private userServises = new UserServices();
+  private userServices = new UserServices();
   private translate: (mess: string) => void;
   private roomService = new RoomService();
 
@@ -24,14 +25,14 @@ export default class GameController {
       const {
         data: { name, password },
       } = message;
-      const registration = this.userServises.register(name, password, ws);
+      const registration = this.userServices.register(name, password, ws);
       const registrationResponse = JSON.stringify(
         buildOutMessage(EOutCommands.REGISTER, registration),
       );
       console.log(`Responsed personal: ${registrationResponse}`);
       ws.send(registrationResponse);
 
-      const winners = this.userServises.getWinners();
+      const winners = this.userServices.getWinners();
       const winnersResponse = JSON.stringify(buildOutMessage(EOutCommands.UPDATE_WINNERS, winners));
       console.log(`Responsed winners: ${winnersResponse}`);
       this.translate(winnersResponse);
@@ -62,6 +63,30 @@ export default class GameController {
         data: { gameId, indexPlayer, ships },
       } = message;
       this.roomService.addShips(gameId, indexPlayer, ships);
+    } else if (message.type === EInCommands.ATTACK) {
+      const { data } = message;
+      const { indexPlayer, gameId } = data;
+      const { x, y } = data;
+      const position: IPosition = { x, y };
+      const isEndGame = this.roomService.attackHandler(gameId, indexPlayer, position);
+      if (isEndGame) {
+        this.userServices.winnerProc(indexPlayer);
+        const winner = this.userServices.getWinners();
+        const winnerResponce = JSON.stringify(buildOutMessage(EOutCommands.UPDATE_WINNERS, winner));
+        console.log(`Translate: ${winnerResponce}`);
+        this.translate(winnerResponce);
+      }
+    } else if (message.type === EInCommands.RANDOM_ATTACK) {
+      const { data } = message;
+      const { indexPlayer, gameId } = data;
+      const isEndGame = this.roomService.attackHandler(gameId, indexPlayer, null);
+      if (isEndGame) {
+        this.userServices.winnerProc(indexPlayer);
+        const winner = this.userServices.getWinners();
+        const winnerResponce = JSON.stringify(buildOutMessage(EOutCommands.UPDATE_WINNERS, winner));
+        console.log(`Translate: ${winnerResponce}`);
+        this.translate(winnerResponce);
+      }
     }
   }
 }
