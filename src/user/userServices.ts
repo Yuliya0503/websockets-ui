@@ -8,7 +8,7 @@ export default class UserServices {
   private winners: IWinner[] = [];
 
   public register(name: string, pass: string, ws: WebSocket): IReg {
-    const isUserExist = this.users.find(({ name: isNameExist }) => {
+    const isUserExist: User | undefined = this.users.find(({ name: isNameExist }) => {
       return isNameExist === name;
     });
 
