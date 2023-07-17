@@ -5,11 +5,11 @@ import { EInCommands, EOutCommands } from '../models/commands';
 import { buildOutMessage } from '../helpers/buildOutMess';
 import RoomService from '../room/roomSrvice';
 import { IAuthenticatedWS } from '../models/iuser';
-import { IPosition } from 'src/models/common';
+import { IPosition } from '../models/common';
 
 export default class GameController {
   private userServices = new UserServices();
-  private translate: (mess: string) => void;
+  public translate: (mess: string) => void;
   private roomService = new RoomService();
 
   constructor(translate: (mess: string) => void) {

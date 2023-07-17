@@ -25,6 +25,9 @@ export default class WSServer {
           console.error(error);
         }
       });
+      ws.on('close', () => {
+        console.log('server close');
+      });
       ws.on('error', console.error);
     });
   }
