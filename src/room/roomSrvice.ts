@@ -36,7 +36,7 @@ export default class RoomService {
 
   getRoomByGameId(id: number): Room | null {
     const room = this.rooms.find(({ game }) => {
-      game.idGame === id;
+      return game.idGame === id;
     });
     return room || null;
   }
@@ -62,8 +62,8 @@ export default class RoomService {
       console.error('Error: room not found');
       return;
     }
-    room.sockets.push(ws);
     room.roomUsers.push({ name: ws.name, index: ws.index });
+    room.sockets.push(ws);
     room.gameCreate();
   }
 
