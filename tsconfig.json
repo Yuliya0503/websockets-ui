@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "CommonJS",
+    "lib": ["ESNext"],
+    "sourceMap": true,
+    "downlevelIteration": true,
+    "strict": true,
+    "noImplicitAny": true,
+    "esModuleInterop": true,
+    "moduleResolution": "Node",
+    "resolveJsonModule": true,
+    "noUncheckedIndexedAccess": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "strictNullChecks": true,
+    "noUnusedLocals": true,
+    "baseUrl": ".",
+    "allowSyntheticDefaultImports": true,
+    "noUnusedParameters": true,
+    "outDir": "dist",
+    "removeComments": true,
+    "strictPropertyInitialization": false
+  }
+}
